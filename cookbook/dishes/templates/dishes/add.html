@@ -1,0 +1,40 @@
+{% extends 'dishes/layout.html' %}
+{% load static %}
+
+
+{% block title %}
+    Add a Dish
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'dishes/add_styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Chelsea+Market&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class='content'>
+    <div class="content-form__wrapper">
+        <h1>Додати нову страву</h1>
+         
+        <form enctype="multipart/form-data" method="post" class='content-form__form'>
+            {% csrf_token %}
+            <h3>Назва страви:</h3>
+            {{ form.dish_name }}
+            <h3>Посилання на сторінку з рецептом:</h3>
+            {{ form.dish_url }}
+            <h3>Посилання на відео:</h3>
+            {{ form.video_url }}
+            <h3>Додати фото рецепту:</h3>
+            {{ images_form }}
+            <br><br>
+            <h3>Додати файл з рецептом(наприклад PDF):</h3>
+            {{ files_form }}
+            
+            <div class="content-button__wrapper">            
+                <input type="submit" value='Зберегти'class='content-button__button'>                
+            </div>
+        </form>
+       
+    </div>
+</div>
+{% endblock %}

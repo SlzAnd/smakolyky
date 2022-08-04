@@ -1,0 +1,100 @@
+{% extends 'dishes/layout.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{ recipe_name }}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'dishes/recipe_styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Chelsea+Market&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class='content'>
+    <div class='content_header'>
+        <h1>{{ dish.dish_name }}</h1>
+    </div>
+    <div class="content__accordion">
+        <div class="content-accordion__item">
+            <input type='checkbox' name='example_accordion' id='image_section' class='content-accordion__input'>
+            <label for='image_section' class="content-accordion__label">Переглянути фото</label>                   
+            <div class="content-accordion__body">
+                {% if images == 0 %}
+                <div class='content-accordion-body__header'>
+                    <h2> Фото відсутнє </h2>
+                </div>
+                <button type="button" class="content-accordion-body__button">
+                    <a href="/dishes/{{ dish.id }}/edit" role='button' class="content-accordion-body-button__link">Додати фото</a>
+                </button><br> 
+                {% else %}
+                    <a href="{{ images.images.url }}" target='_blank'> 
+                        <img src="{{ images.images.url }}" target='_blank' class="content-accordion-body__image">
+                    </a>
+                {% endif %}
+            </div>            
+        </div>
+        <div class="content-accordion__item">
+            <input type='checkbox' name='example_accordion' id='video_section' class='content-accordion__input'>
+            <label for='video_section' class="content-accordion__label">Переглянути відео</label>
+            <div class="content-accordion__body">
+                {% if dish.video_url == '' %}
+                    <div class='content-accordion-body__header'>
+                        <h2>Відео відсутнє</h2>
+                    </div>
+                    <button type="button" class="content-accordion-body__button">
+                        <a href="/dishes/{{ dish.id }}/edit" role='button' class="content-accordion-body-button__link">Додати відео</a>
+                    </button><br> 
+                {% else %}
+                <!--
+                    <iframe width='420' height='315' src='{{ dish.video_url }}'></iframe>
+                  -->    
+                    <h2>Перейти до перегляду відео:</h2>
+                    <a href = '{{ dish.video_url }}' target='_blank' class='content-link'> {{dish.video_url}}</a>
+                    
+                {% endif %}
+                    
+            </div>
+        </div>
+        <div class="content-accordion__item">
+            <input type='checkbox' name='example_accordion' id='link_section' class='content-accordion__input'>
+            <label for='link_section' class="content-accordion__label">Перейти за посиланням</label>
+            <div class="content-accordion__body">
+                {% if dish.dish_url == None %}
+                <div class='content-accordion-body__header'>
+                    <h2>Посилання на рецепт відсутнє</h2>
+                </div>
+                <button type="button" class="content-accordion-body__button">
+                    <a href="/dishes/{{ dish.id }}/edit" role='button' class="content-accordion-body-button__link">Додати лінк</a>
+                </button><br>                        
+                {% else %}
+                <h2>Перейти за посиланням:</h2>
+                <a href = '{{ dish.dish_url }}' target='_blank' class='content-link'> {{dish.dish_url}}</a>
+                {% endif %}
+            </div>
+        </div>        
+        <div class="content-accordion__item">
+            <input type='checkbox' name='example_accordion' id='file_section' class='content-accordion__input'>
+            <label for='file_section' class="content-accordion__label">Переглянути файл</label>
+            <div class="content-accordion__body">
+                {% if files == 0 %}
+                    <div class='content-accordion-body__header'>
+                        <h2>Файл відсутній</h2>
+                    </div>
+                    <button type="button" class="content-accordion-body__button">
+                        <a href="/dishes/{{ dish.id }}/edit" role='button' class="content-accordion-body-button__link">Додати файл</a>
+                    </button><br> 
+                {% else %}                        
+                    <!--
+                    <embed src="{{ file }}" width="800px" height="2100px" /> <br>
+                    -->
+                    <a href = '{{ files.files.url }}' target='_blank' class='content-link'> {{ files.files }}</a>                        
+                {% endif %}
+            </div>
+        </div>        
+    </div>
+</div>
+        
+
+{% endblock %}

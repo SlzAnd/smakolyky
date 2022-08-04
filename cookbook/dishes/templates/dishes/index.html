@@ -1,0 +1,181 @@
+{% load static %}
+
+<!doctype html>
+<html lang="uk-UA">
+<head>
+    <title>SmakolykyUA</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'dishes/favicon.ico' %}">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{% static 'dishes/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
+    
+    <meta name='viewport' content="width=device-width">
+    
+
+</head>
+<body>
+  <div class='wrapper'>
+    <header class='header'>
+      <div class='container'>
+        <div class="header-body">
+          
+          <a href="/dishes" class="header-logo">
+            <img src="{% static 'dishes/logo.png' %}" alt='Лого' class='header-logo__image'>            
+          </a>
+
+          <div class='header__burger'>
+            <span></span>
+          </div>
+
+          <nav class="header-body-menu">
+            <ul class='header-body-menu-list'>
+              <li>
+                {% if request.user.is_authenticated %}
+                <a class="header-body-menu__link" href="/dishes/">Головна</a>
+                {% else %}
+                <a class="header-body-menu__link" href="/dishes/login">Увійти</a>
+                {% endif %}                 
+              </li>
+              <li>
+                {% if request.user.is_authenticated %}
+                <a class="header-body-menu__link" href="/dishes/disheslist">Список страв</a>                  
+                {% else %}
+                <a class="header-body-menu__link" href="/dishes/register">Зареєструватися</a>
+                {% endif %}
+              </li>
+              <li>
+                <a class="header-body-menu__link" href="/dishes/about_us">Про нас</a>
+              </li>
+              <li>
+                <a class="header-body-menu__link" href="/dishes/how_to_use">Як користуватися</a>
+              </li>
+            </ul>
+          </nav>                              
+        </div>        
+      </div>
+    </header>
+
+    <div class='content'>
+      
+      <div class='content-header'>
+        <h1>SmakolykyUA</h1>
+      </div>     
+
+      <div class='image-slider swiper-container'>
+        <div class='image-slider__wrapper swiper-wrapper'>
+          <div class='image-slider__slide swiper-slide'>
+            <div class='image-slider__image'>
+              <img src="{% static 'dishes/img-1.jpg' %}" alt='Зображення 1'>
+            </div>
+          </div>
+        
+          <div class='image-slider__slide swiper-slide'>
+            <div class='image-slider__image'>
+              <img src="{% static 'dishes/img-2.jpg' %}" alt='Зображення 2'>
+            </div>
+          </div>   
+      
+          <div class='image-slider__slide swiper-slide'>
+            <div class='image-slider__image'>
+              <img src="{% static 'dishes/img-3.jpg' %}" alt='Зображення 3'>
+            </div>
+          </div>
+
+          <div class='image-slider__slide swiper-slide'>
+            <div class='image-slider__image'>
+              <img src="{% static 'dishes/img-4.jpg' %}" alt='Зображення 4'>
+            </div>
+          </div>
+
+          <div class='image-slider__slide swiper-slide'>
+            <div class='image-slider__image'>
+              <img src="{% static 'dishes/img-5.jpg' %}" alt='Зображення 5'>
+            </div>
+          </div>
+
+          <div class='image-slider__slide swiper-slide'>
+            <div class='image-slider__image'>
+              <img src="{% static 'dishes/img-6.jpg' %}" alt='Зображення 6'>
+            </div>
+          </div>
+        </div> 
+        <!-- Стрілки керування слайдером
+          <div class='swiper-button-prev'></div>
+          <div class='swiper-button-next'></div> 
+         -->  
+          <div class='swiper-pagination'></div> 
+      </div>
+
+      <div class='content-row'>          
+        <div class='content-row__column'>
+          <div class='column-text'>
+            <p>Знайшов цікавенький рецептик? Зберігай його хутчіше, аби не загубився!</p>
+            <p>Для цього тобі потрібно тільки зареєструватися, увійти і все! Ти вже можеш користуватися нашим функціоналом! Безкоштовно!</p>
+            <p>З нами рецепти твоїх смаколиків завжди будуть у безпеці</p>
+          </div>         
+          <div class='column-image'>
+            <img src='{% static "dishes/content-image-1.jpg" %}' alt='Image-1 мабуть вкрала русня' class='column-image__image'>
+          </div>
+        </div>        
+      </div>
+
+      <div class='content-row'>        
+        <div class='content-row__column'>
+          <a class='column-image'>
+            <img src='{% static "dishes/content-image-2.jpg" %}' alt='Image2' class='column-image__image'>
+          </a>          
+          <div class='column-text'>
+            <p>Скріншот, відео, текстовий файл або посилання на рецепт.</p>
+            <p>Зберігай як тобі зручно. Ми знаємо як буває неприємно спочатку знайти як готувати якийсь смаколик в Інстаграм, а коли надумав приготувати його, загубити той рецепт...</p>
+            <p>Не потрібно з цим миритися, зберігай на SmakolykyUA! </p>
+          </div>
+        </div>        
+      </div>
+
+      <div class='content-row'>        
+        <div class='content-row__column'>
+          <div class='column-text'>
+            <p>Зберіг скріни але любиш згодом красиво оформити свої рецепти? Ми теж, і вже працюємо над відповідним функціоналом.</p>
+            <p>А поки що можеш записати його у текстовому файлі або скористатися ресурсом <a target='blanc' href ='https://www.notion.so/'>Notion</a>, та зберегти на нашому сайті.</p>
+            <p id='third'>З нашого боку обіцяємо довго не затримуватись і якомога швидше додати змогу перенести твої записи смаколиків у наш застосунок.</p>
+          </div>          
+          <div class='column-image'>
+            <img src='{% static "dishes/content-image-3.jpg" %}' alt='Image3' class='column-image__image'>
+          </div>
+        </div>       
+      </div>
+
+    </div>
+    
+      <footer class='footer'>
+        <div class='footer-wrapper'>
+          <div class='footer-column' id ='first'>
+            <p class='footer-column__text'>
+              Зв'язатися з розробником: 
+            </p>
+            <p class='footer-column__text'>
+              andre.slznv@gmail.com 
+            </p>
+          </div>
+          <div class='footer-column' id='second'>
+            <p class='footer-column__text'>
+              2022 Ukraine
+            </p>
+          </div>
+          <div class='footer-column' id='third'>
+            <p class='footer-column__text'>
+              Python Django / JS / HTML / CSS
+            </p>
+          </div>
+
+        </div>
+      </footer>
+    
+  </div>
+
+      <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+      <script src="{% static 'dishes/main.js' %}"></script>
+      
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+{% extends 'dishes/layout.html' %}
+{% load static %}
+
+
+{% block title %}
+    Dishes
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'dishes/dishes_list_styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Chelsea+Market&display=swap" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <div class='content'>
+        <div class="content-header">
+            <h1>My Smakolyky</h1>
+        </div>
+        <div class='content-cards'>            
+            {% for x in dishes %}
+                <div class='content__card'>   
+                    <h3>{{ x.dish_name }}</h3>                    
+                    <a href="/dishes/recipe/{{ x.id }}" role='button' class="">
+                        <span class='content-table-button__text'>Переглянути</span>
+                    </a>                    
+                    <div id="operations">
+                        <a href="/dishes/{{ x.id }}/edit" role='button' class="">
+                            <span class='content-table-button__text'>Оновити</span>
+                        </a>
+                        <a href="/dishes/delete/{{ x.id }}" role='button' class="">
+                            <span class='content-table-button__text'>Видалити</span>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class='content-table__empty'>
+                    <h2>Вибач, в твоєму списку поки що порожньо!</h2>
+                </div>            
+                {% endfor %}
+        </div>
+
+        <div class="content-table-wrapper">            
+            <table class="content-table__table">
+                <tr id='table-header'>
+                    <th id='content-table__header'>№</th>                
+                    <th id='content-table__header'>Назва страви</th>                    
+                    <th id='content-table__header'>Як приготувати?</th>
+                    <th id='content-table__header'>Операції</th>
+
+                </tr>
+                {% for x in dishes %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    
+                    <td>{{ x.dish_name }}</td>                 
+
+                    <td><button type="button" class="content-table__button">
+                            <a href="/dishes/recipe/{{ x.id }}" role='button' class="">
+                                <span class='content-table-button__text'>Переглянути</span>
+                            </a>
+                        </button>
+                    </td>
+
+                    <td><button type="button" class="content-table__button">
+                            <a href="/dishes/{{ x.id }}/edit" role='button' class="">
+                                <span class='content-table-button__text'>Оновити</span>
+                            </a>
+                        </button>
+                        <button type="button" class="content-table__button">
+                            <a href="/dishes/delete/{{ x.id }}" role='button' class="">
+                                <span class='content-table-button__text'>Видалити</span>
+                            </a>
+                        </button><br>
+                    </td>
+                </tr>
+                {% empty %}
+                <div class='content-table__empty'>
+                    <h2>Вибач, в твоєму списку поки що порожньо!</h2>  
+                </div>         
+                {% endfor %}
+            </table>
+            
+            <span> {{ error }} </span><br>
+        </div>
+        <div class='content-button__wrapper'>
+            <a href="/dishes/add" role='button' class="content-button__button">
+            <span class='content-button__text'>Новий рецепт</span>
+            </a>
+        </div>
+        
+    </div>
+    
+{% endblock %}
+    

@@ -1,0 +1,10 @@
+*.pyc
+__pycache__
+myvenv
+/static
+.DS_Store
+# Text backup files
+*.bak
+
+#Database
+*.sqlite3

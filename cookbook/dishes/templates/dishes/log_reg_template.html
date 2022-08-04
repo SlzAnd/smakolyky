@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="uk-UA">
+<head>
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'dishes/favicon.ico' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'dishes/log_reg_styles.css' %}">
+    <meta name='viewport' content="width=device-width">
+  </head>
+<body>
+  <div class='wrapper'>
+    <header class='header'>
+      <div class='container'>
+        <div class="header-body">
+          
+          <a href="/dishes" class="header-logo">
+            <img src="{% static 'dishes/logo.png' %}" alt='Лого' class='header-logo__image'>            
+          </a>
+
+          <div class='header__burger'>
+            <span></span>
+          </div>
+
+          <nav class="header-body-menu">
+            <ul class='header-body-menu-list'>
+              <li>
+                {% if request.user.is_authenticated %}
+                <a class="header-body-menu__link" href="/dishes/">Головна</a>
+                {% else %}
+                <a class="header-body-menu__link" href="/dishes/login">Увійти</a>
+                {% endif %}                 
+              </li>
+              <li>
+                {% if request.user.is_authenticated %}
+                <a class="header-body-menu__link" href="/dishes/disheslist">Список страв</a>                  
+                {% else %}
+                <a class="header-body-menu__link" href="/dishes/register">Зареєструватися</a>
+                {% endif %}
+              </li>
+              <li>
+                <a class="header-body-menu__link" href="/dishes/about_us">Про нас</a>
+              </li>
+              <li>
+                <a class="header-body-menu__link" href="/dishes/how_to_use">Як користуватися</a>
+              </li>
+            </ul>
+          </nav>                              
+        </div>        
+      </div>
+    </header>
+{% block content %}
+
+{% endblock %}
+  </div>
+
+  <script src="{% static 'dishes/recipe.js' %}"></script>
+</body>
+</html>

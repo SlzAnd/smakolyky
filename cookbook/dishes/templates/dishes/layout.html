@@ -1,0 +1,92 @@
+{% load static %}
+
+<!doctype html>
+<html lang="uk-UA">
+<head>
+    <link rel="icon" type="image/x-icon" href="{% static 'dishes/favicon.ico' %}">
+    <title>{% block title %} {% endblock %}</title>
+    {% block styles %} {% endblock %}
+    
+    <meta name='viewport' content="width=device-width">
+</head>
+<body>
+  <div class='wrapper'>
+    <header class='header'>
+      <div class='container'>
+        <div class="header-body">
+          
+          <a href="/dishes" class="header-logo">
+            <img src="{% static 'dishes/logo.png' %}" alt='Лого' class='header-logo__image'>            
+          </a>
+
+          <div class='header__user'>
+            <span>Welcome, {{ request.user }} </span>
+            <a href='/dishes/logout' class="header-body-menu__link">Вийти</a>
+          </div>
+
+          <div class='header__burger'>
+            <span></span>
+          </div>
+          
+
+          <nav class="header-body-menu">
+            <ul class='header-body-menu-list'>
+              <li>
+                {% if request.user.is_authenticated %}
+                <a class="header-body-menu__link" href="/dishes/">Головна</a>
+                {% else %}
+                <a class="header-body-menu__link" href="/dishes/login">Увійти</a>
+                {% endif %}                 
+              </li>
+              <li>
+                {% if request.user.is_authenticated %}
+                <a class="header-body-menu__link" href="/dishes/disheslist">Список страв</a>                  
+                {% else %}
+                <a class="header-body-menu__link" href="/dishes/register">Зареєструватися</a>
+                {% endif %}
+              </li>
+              <li>
+                <a class="header-body-menu__link" href="/dishes/about_us">Про нас</a>
+              </li>
+              <li>
+                <a class="header-body-menu__link" href="/dishes/how_to_use">Як користуватися</a>
+              </li>
+            </ul>
+          </nav>                              
+        </div>        
+      </div>
+    </header>
+    
+{% block content %}
+
+{% endblock %}
+    
+<footer class='footer'>
+  <div class='footer-wrapper'>
+    <div class='footer-column' id ='first'>
+      <p class='footer-column__text'>
+        Зв'язатися з розробником: 
+      </p>
+      <p class='footer-column__text'>
+        andre.slznv@gmail.com 
+      </p>
+    </div>
+    <div class='footer-column' id='second'>
+      <p class='footer-column__text'>
+        2022 Ukraine
+      </p>
+    </div>
+    <div class='footer-column' id='third'>
+      <p class='footer-column__text'>
+        Python Django / JS / HTML / CSS
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+  </div>
+  <script src="{% static 'dishes/recipe.js' %}"></script>
+
+</body>
+</html>
