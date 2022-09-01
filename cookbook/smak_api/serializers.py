@@ -8,6 +8,8 @@ class DishesSerializer(serializers.ModelSerializer):
         model = Dishes
         fields = ['user',
                   'dish_name',
+                  'dish_url',
+                  'video_url',
                   ]
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
