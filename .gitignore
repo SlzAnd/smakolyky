@@ -2,9 +2,14 @@
 __pycache__
 myvenv
 /static
+/media
 .DS_Store
 # Text backup files
 *.bak
 
 #Database
 *.sqlite3
+.pg_service.conf
+.my_pgpass
+
+.env
