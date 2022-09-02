@@ -16,6 +16,7 @@ Markdown==3.4.1
 MarkupSafe==2.1.1
 Pillow==9.2.0
 psycopg==3.0.16
+psycopg2
 #psycopg-binary==3.0.16
 #psycopg2-binary==2.9.3
 pytz==2022.2.1
