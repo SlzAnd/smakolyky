@@ -21,7 +21,7 @@
             <input type='checkbox' name='example_accordion' id='image_section' class='content-accordion__input'>
             <label for='image_section' class="content-accordion__label">Переглянути фото</label>                   
             <div class="content-accordion__body">
-                {% if images == 0 %}
+                {% if dish.image == '' %}
                 <div class='content-accordion-body__header'>
                     <h2> Фото відсутнє </h2>
                 </div>
@@ -29,8 +29,8 @@
                     <a href="/dishes/{{ dish.id }}/edit" role='button' class="content-accordion-body-button__link">Додати фото</a>
                 </button><br> 
                 {% else %}
-                    <a href="{{ images.images.url }}" target='_blank'> 
-                        <img src="{{ images.images.url }}" target='_blank' class="content-accordion-body__image">
+                    <a href="{{ dish.image.url }}" target='_blank'> 
+                        <img src="{{ dish.image.url }}" target='_blank' class="content-accordion-body__image">
                     </a>
                 {% endif %}
             </div>            
@@ -78,7 +78,7 @@
             <input type='checkbox' name='example_accordion' id='file_section' class='content-accordion__input'>
             <label for='file_section' class="content-accordion__label">Переглянути файл</label>
             <div class="content-accordion__body">
-                {% if files == 0 %}
+                {% if dish.file == '' %}
                     <div class='content-accordion-body__header'>
                         <h2>Файл відсутній</h2>
                     </div>
@@ -89,7 +89,7 @@
                     <!--
                     <embed src="{{ file }}" width="800px" height="2100px" /> <br>
                     -->
-                    <a href = '{{ files.files.url }}' target='_blank' class='content-link'> {{ files.files }}</a>                        
+                    <a href = '{{ dish.file.url }}' target='_blank' class='content-link'> {{ dish.file }}</a>                        
                 {% endif %}
             </div>
         </div>        

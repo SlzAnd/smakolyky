@@ -1,18 +1,21 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from .models import Dishes, Dish_Images, Dish_Files
-from .forms import AddDishForm, DishImageForm, DishFileForm, CreateUserForm
+from .models import Dishes
+from .forms import AddDishForm, CreateUserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-
+import requests
+from getpass import getpass
 import re
 
 
-# Create your views here.
+"""
+Register View.
+"""
 def registerPage(request):
     if request.user.is_authenticated:
         return redirect('dishes:disheslist')
@@ -34,10 +37,13 @@ def registerPage(request):
                 
         context = {
             'form':form,
-            #'help_text': help_text
         }
         return render(request,'dishes/register.html', context)
 
+
+"""
+Login View.
+"""
 def loginPage(request):
     if request.user.is_authenticated:
         return redirect('dishes:disheslist')
@@ -57,20 +63,39 @@ def loginPage(request):
         }
         return render(request,'dishes/login.html', context)
 
+
+"""
+Main Page View. Render template only
+"""
 def index(request):
     return render(request, 'dishes/index.html', {})
 
+
+"""
+About Us Page View. Render template only
+"""
 def about_us(request):
     return render(request,'dishes/about_us.html', {})
 
+
+"""
+How to use Page View. Render template only
+"""
 def how_to_use(request):
     return render(request,'dishes/how_to_use.html', {})
 
+
+"""
+Log OUT View.
+"""
 def logoutUser(request):
     logout(request)
     return redirect('dishes:login')
 
 
+"""
+List with all user's dishes.
+"""
 @login_required(login_url='dishes:login')
 def dishes_list(request):
     user = request.user
@@ -80,8 +105,17 @@ def dishes_list(request):
         'dishes': dishes,
     }
     return HttpResponse(template.render(context, request))
+    # user = request.user
+    # response = requests.get('http://127.0.0.1:8000/api/all', auth=(user.username, '784512Sa'))
+    # dishes = response.json()
+    # print(dishes)
+    
+    # return render(request, 'dishes/dishes_list.html', dishes)
 
 
+"""
+View for adding new dish to your list.
+"""
 @login_required(login_url='dishes:login')
 def add(request):
     if request.method == 'POST':
@@ -90,93 +124,52 @@ def add(request):
         dishname = request.POST.get('dish_name')
         dishurl = request.POST.get('dish_url')
         videourl = request.POST.get('video_url')
-        image_list = request.FILES.getlist('images')
-        file_list = request.FILES.getlist('files')
+        image = request.FILES.get('image')
+        file = request.FILES.get('file')
         if name['dish_name'] != None:
-            dish_name = Dishes.objects.create(dish_name = dishname, dish_url = dishurl, video_url = videourl, user=user)
-        else:
-            dish_name = None
-        for image in image_list:
-            img = Dish_Images.objects.create(images = image, dish = dish_name)
-        for file in file_list:
-            f = Dish_Files.objects.create(files = file, dish = dish_name)
+            Dishes.objects.create(dish_name = dishname, dish_url = dishurl,
+                                              video_url = videourl, image=image, file=file, user=user)
         return redirect('dishes:disheslist')
     else:
-        name = AddDishForm()
-        image = DishImageForm()
-        file = DishFileForm()
-    return render(request, 'dishes/add.html', { 'form' : name, 'images_form': image, 'files_form': file })
+        form = AddDishForm()
+    return render(request, 'dishes/add.html', {'form':form})
 
 
+"""
+View for deleting dish from your list.
+"""
 def delete(request, id):
     dish = Dishes.objects.get(id=id)
     dish.delete()
     return HttpResponseRedirect(reverse('dishes:disheslist'))
 
 
+"""
+View for editing dish in your list.
+"""
 @login_required(login_url='dishes:login')
 def edit(request, id):
     dish = Dishes.objects.get(id=id)    
-    image_list = Dish_Images.objects.filter(dish=dish)
-    file_list = Dish_Files.objects.filter(dish=dish)
     
     if request.method == 'POST':
-        form = AddDishForm(request.POST, instance = dish)
-        if len(image_list) == 0:
-            new_img = request.FILES.get('images')
-            Dish_Images.objects.create(images = new_img, dish = dish)
-        else:
-            images = Dish_Images.objects.get(dish=dish)
-            image_form = DishImageForm(request.POST, request.FILES, instance = images)
-            if image_form.is_valid:
-                image_form.save()
-        if len(file_list) == 0:
-            file = request.FILES.get('files')
-            Dish_Files.objects.create(files=file, dish=dish)
-        else:            
-            file = Dish_Files.objects.get(dish=dish)            
-            file_form = DishFileForm(request.POST, request.FILES, instance=file)
-            if file_form.is_valid:
-                file_form.save()  
+        form = AddDishForm(request.POST, request.FILES, instance = dish)
+        
         if form.is_valid:                     
                 form.save()
                   
         return redirect('dishes:disheslist')
     else:        
         form = AddDishForm(instance=dish)
-        if len(image_list) == 0:
-            image_form = DishImageForm()
-        else:
-            images = Dish_Images.objects.get(dish=dish)            
-            image_form = DishImageForm(instance=images)
-        if len(file_list) == 0:
-            file_form = DishFileForm()
-        else:
-            file = Dish_Files.objects.get(dish=dish)
-            file_form = DishFileForm(instance=file)
-                   
-    return render(request, 'dishes/edit.html', {'form': form,'image_list': image_list, 'image_form': image_form, 'file_form': file_form })
+                          
+    return render(request, 'dishes/edit.html', {'form':form})
 
 
+
+"""
+View for looking a dish from your list. Render new page with accordion(Image, Video, URL, File)
+"""
 @login_required(login_url='dishes:login')
 def recipe(request, id):
     dish = Dishes.objects.get(id=id)
-    try:
-        image = Dish_Images.objects.get(dish=dish)        
-    except ObjectDoesNotExist:
-        image = 0
-    try:
-        file = Dish_Files.objects.get(dish=dish)
-    except ObjectDoesNotExist:
-        file = 0
-
-    if Dish_Images.objects.filter(dish=dish, images__exact='').count() > 0:
-        images = 0
-    else:
-        images = image
-    if Dish_Files.objects.filter(dish=dish, files__exact='').count() > 0:
-        files = 0
-    else:
-        files = file
-
-    return render(request,'dishes/recipe.html',{'dish': dish, 'images': images, 'files': files})
+        
+    return render(request,'dishes/recipe.html',{'dish':dish})
