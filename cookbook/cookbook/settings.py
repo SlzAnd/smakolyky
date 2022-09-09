@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     
     'dishes.apps.DishesConfig',
     'smak_api',
+    'recipes',
     
     'rest_framework',
     'rest_framework.authtoken',

@@ -15,7 +15,7 @@ Create the main model, named Dishes, for saving in the database
 """
 class Dishes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    dish_name = models.CharField(max_length=255, null=True)
+    dish_name = models.CharField(max_length=255, null=True, unique=True)
     dish_url = models.CharField(max_length=255, null=True, blank=True)
     video_url = models.CharField(max_length=255, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -31,10 +31,11 @@ class Dishes(models.Model):
         else:
             return ''
 """
-Create the model for saving dish images
-The 'dish' used for connecting with the Dishes model(which dish corresponds to this image)
+Create the model for categories of dishes + recipes
 """
 
+class Category(models.Models):
+    pass
 
 
       
