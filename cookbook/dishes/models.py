@@ -6,8 +6,8 @@ from django.template.defaultfilters import slugify
 
 def get_image_filename(instance, filename):
     title = instance.images
-    slug = slugify(title)
-    return "%s-%s" % (slug, filename)
+    img_slug = slugify(title)
+    return "%s-%s" % (img_slug, filename)
 
 
 """
@@ -44,7 +44,7 @@ class Dishes(models.Model):
     category = models.ForeignKey(Category, to_field='name', verbose_name='category', on_delete=models.CASCADE, null=True)
     
     def __str__(self):
-        return f'User: {self.user} --> Dish: {self.dish_name}'
+        return f'ID: {self.id} | User: {self.user} | Dish: {self.dish_name}'
 
     def get_image(self):
         if self.image:

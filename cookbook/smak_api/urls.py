@@ -6,8 +6,10 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 
 urlpatterns = [
-    path('', view=views.api_home, name='home'),
-    #path('all', view=views.DishesList.as_view(), name='all'),
+    path('', views.api_home, name='home'),
+    path('all/', views.DishesList.as_view(), name='all'),
+    path('dishes/<str:dish_name>/', views.DishDetail.as_view(), name='dish'),
+    
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
