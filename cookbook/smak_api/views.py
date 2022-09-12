@@ -2,19 +2,14 @@ from django.http import Http404
 from django.forms.models import model_to_dict
 from django.contrib.auth.models import User
 
-from rest_framework import status, permissions, generics
+from rest_framework import status, permissions, generics, mixins
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from dishes.models import *
+from recipes.models import *
 from .serializers import DishesSerializer, ImageSerializer, RecipeSerializer
-
-
-
-@api_view(["GET"])
-def api_home(request, *args, **kwargs):
-    return Response({'message': 'Welcome to SmakolykyUA-API'})
 
 
 """
@@ -62,3 +57,58 @@ class DishDetail(APIView):
         dish = self.get_object(dish_name)
         dish.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+""" 
+RecipeList-view give possibility GET list of recipes and create(POST) new recipe 
+"""
+class RecipeList(mixins.ListModelMixin,
+                mixins.CreateModelMixin,
+                generics.GenericAPIView):
+    
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+
+""" 
+RecipeDetail-view give possibility GET one of recipes and edit(PUT), destroy(DELETE) one of them.
+lookup-field by default = 'pk'. 
+"""
+class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
+    
+    # The field that should be used to for performing object lookup of individual model instances
+    lookup_field = 'dish_name'
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+    
+
+class ImageList(generics.ListAPIView):
+    
+    queryset = Images.objects.all()
+    serializer_class = ImageSerializer
+
+
+class ImageCreate(APIView):
+
+    def post(self, request, format=None):
+        serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
+    
+    # pk is default value for lookup_field
+    lookup_field = 'pk'
+    queryset = Images.objects.all()
+    serializer_class = ImageSerializer
+    
+    
