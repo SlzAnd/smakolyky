@@ -2,17 +2,29 @@ from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
-
+from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
 
 
 urlpatterns = [
-    path('', views.DishesList.as_view(), name='all'),
-    path('dishes/<str:dish_name>/', views.DishDetail.as_view(), name='dish'),
     
+    # Authorization-authentication end-points
+    path('register/', views.RegisterAPIView.as_view(), name='user_create'),
+    path('login/', views.LoginView.as_view(), name='user_login'),
+    
+    # Cookbook end-points
+    path('', views.DishesList.as_view(), name='dishes_list'),
+    path('dishes/<str:dish_name>/', views.DishDetail.as_view(), name='dishes_detail'),
+    
+    # Recipe end-points
     path('recipes/', views.RecipeList.as_view()),
     path('recipes/<str:dish_name>/', views.RecipeDetail.as_view()),
     
-    
+    # Images au-points
     path('recipes/image/add/', views.ImageCreate.as_view()),
     path('recipes/image/<int:pk>/', views.ImageDetail.as_view()),
     path('recipes/image/all/', views.ImageList.as_view()),

@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import datetime
 import os
 import environ
 from pathlib import Path
@@ -45,12 +46,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    #local apps
+    
     'dishes.apps.DishesConfig',
     'smak_api',
     'recipes',
     
+    # 3-rd part apps
+    
     'rest_framework',
-    'rest_framework.authtoken',
+    'knox',
     
 ]
 
@@ -157,9 +162,13 @@ LOGOUT_REDIRECT_URL = "/"
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    #'DEFAULT_PERMISSION_CLASSES': [
-    #    'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    #]
+    'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.IsAuthenticated',    
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        #'rest_framework.authentication.SessionAuthentication',
+        #'smak_api.authentication.TokenAuthentication',
+        'knox.auth.TokenAuthentication',
+    ]
 }
 
-#django_heroku.settings(locals())

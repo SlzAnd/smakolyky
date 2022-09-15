@@ -1,8 +1,9 @@
 from unicodedata import category
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.template.defaultfilters import slugify
 
+User = settings.AUTH_USER_MODEL
 
 def get_image_filename(instance, filename):
     title = instance.images

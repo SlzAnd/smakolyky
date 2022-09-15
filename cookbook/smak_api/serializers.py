@@ -1,13 +1,22 @@
+from urllib import request
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from dishes.models import Dishes, Category
 from recipes.models import Recipe, Images
 
 class DishesSerializer(serializers.ModelSerializer):
+    
+    url = serializers.HyperlinkedIdentityField(
+        view_name='dishes_detail',
+        lookup_field = 'dish_name'
+        )
+    user = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Dishes
-        fields = ['user',
+        fields = ['url',
+                  'user',
                   'dish_name',
                   'dish_url',
                   'video_url',
@@ -16,8 +25,14 @@ class DishesSerializer(serializers.ModelSerializer):
                   'file',
                   'category',
                   ]
-        
-        
+    
+    # def get_edit_url(self, obj):
+    #     request = self.context.get('request')
+    #     if request is None:
+    #         return None
+    #     return reverse("dishes-edit", kwargs={"dish_name": obj.dish_name}, request=request)
+    
+    
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -27,6 +42,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Recipe
         fields = ['user',
@@ -40,16 +56,33 @@ class RecipeSerializer(serializers.ModelSerializer):
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Images
-        fields = ['dish_name',
-                  'image']
+        fields = ['id',
+                  'image_name',
+                  'image',
+                  'thumbnail']
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'groups']
+        fields = ['id', 'username', 'email', 'groups',]
 
+        
+        
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True}
+            }
+        
+        def create(self, validated_data):
+            user = User.objects.create_user(validated_data['username'], validated_data['email'], validated_data['password'])
+
+            return user
+
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
