@@ -2,7 +2,8 @@
 __pycache__
 myvenv
 /static
-/media
+cookbook/media
+
 .DS_Store
 # Text backup files
 *.bak
@@ -13,3 +14,5 @@ myvenv
 .my_pgpass
 
 .env
+
+Todo.txt

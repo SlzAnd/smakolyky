@@ -19,15 +19,14 @@ from knox.auth import AuthToken
 from dishes.models import *
 from recipes.models import *
 from .serializers import (DishesSerializer, ImageSerializer,
-                          RecipeSerializer, UserSerializer,
-                          RegisterSerializer)
+                          RecipeSerializer, UserSerializer)
 from .mixins import UserQuerySetMixin
 from .authentication import TokenAuthentication
 
 
 class RegisterAPIView(generics.GenericAPIView):
     
-    serializer_class = RegisterSerializer
+    serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
