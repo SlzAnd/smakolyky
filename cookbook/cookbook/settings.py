@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'recipes',
     
     # 3-rd part apps
-    
+    'drf_yasg',
     'rest_framework',
     'knox',
     
@@ -166,9 +166,22 @@ REST_FRAMEWORK = {
         #'rest_framework.permissions.IsAuthenticated',    
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        #'rest_framework.authentication.SessionAuthentication',
-        #'smak_api.authentication.TokenAuthentication',
         'knox.auth.TokenAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        #'smak_api.authentication.TokenAuthentication',
     ]
 }
 
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Basic': {
+            'type': 'basic'
+      },
+      'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+   }
+}
